@@ -1,0 +1,135 @@
+<html lang="en">
+<head>
+    <title>To-Do List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.css" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body ng-app="myApp" ng-controller="listController as model">
+    
+    <!-- Basic navigation with add button -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">To-Do List</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <form class="navbar-form navbar-right">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-default" ng-click="model.editList()">Settings</button>
+                        <button type="button" class="btn btn-success" ng-click="model.addItem()">New</button>
+                    </div>
+                </form>
+            </div>
+            <!--/.navbar-collapse -->
+        </div>
+    </nav>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        <div class="container">
+            <h1>{{model.list.title}}</h1>
+            <p>Current Item Count: {{model.list.items.length}}</p>
+            <div class="col-md-6">
+                Mode:
+                <select class="form-control" ng-model="model.filterMode">
+                    <option value="Open">Open</option>
+                    <option value="Review">Review</option>
+                    <option value="All">All</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                Filter:
+                <input type="text" placeholder="Search" class="form-control" ng-model="model.filterText" />
+            </div>
+        </div>
+    </div>
+
+    <!-- List out the actual items -->
+    <div class="container">
+        <div class="row todo-item" ng-repeat="item in model.list.items | filter:model.filterItems">
+            <h2 class="pull-left">{{item.title}} 
+              <span class="glyphicon glyphicon-ok-circle" ng-show="item.complete" title="{{item.dateCompleted.toLocaleString()}}"></span>
+            </h2>
+            <div class="btn-group pull-right" uib-dropdown>
+                <button id="split-button" type="button" class="btn btn-primary" uib-dropdown-toggle>Action</button>
+                <ul class="uib-dropdown-menu" role="menu" aria-labelledby="split-button">
+                    <li><a ng-click="model.markItemComplete(item)" ng-show="!item.complete"><span class="glyphicon glyphicon-ok"></span> Mark as Complete</a></li>
+                    <li><a ng-click="model.editItem(item)"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
+                    <li><a ng-click="model.deleteItem(item)"><span class="glyphicon glyphicon-remove"></span> Delete</a></li>
+                </ul>
+            </div>
+            <p style="clear:both; white-space: pre">{{item.details}}</p>
+        </div>
+
+        <footer>
+            <p>&copy; Mark Hildreth 2015</p>
+        </footer>
+    </div>
+
+    <script type="text/ng-template" id="itemContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Add new item</h3>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="form-control" ng-model="model.item.title" />
+            </div>
+            <div class="form-group">
+                <label>Details</label>
+                <textarea rows="8" class="form-control" ng-model="model.item.details" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default" type="button" ng-click="model.cancel()">Cancel</button>
+            <button class="btn btn-success" type="button" ng-click="model.saveItem()">Save</button>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="confirmDelete.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Delete item</h3>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete this item?</p>
+            <p><em>{{model.item.title}}</em></p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default" type="button" ng-click="model.cancel()">Cancel</button>
+            <button class="btn btn-danger" type="button" ng-click="model.deleteItem()">Delete</button>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="listSettings.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Configure list</h3>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="form-control" ng-model="model.settings.title" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default" type="button" ng-click="model.cancel()">Cancel</button>
+            <button class="btn btn-success" type="button" ng-click="model.saveSettings()">Save</button>
+        </div>
+    </script>
+
+    <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.2/ui-bootstrap-tpls.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+</body>
+
+</html>

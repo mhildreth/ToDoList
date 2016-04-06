@@ -1,0 +1,12 @@
+.todo-item {
+	padding: 1em;
+	border-bottom: solid 1px lightgray
+}
+
+.todo-item h2 {
+	margin-top: 0;
+}
+
+footer {
+	margin-top: 1em;
+}
